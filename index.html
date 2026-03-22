@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindfulMe | Student Stress Analyzer & Diary</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for aesthetic look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Quicksand:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <h1>MindfulMe</h1>
+        <p>Your companion for a balanced student life</p>
+    </header>
+
+    <main class="container">
+        
+        <!-- Stress Analyzer Section -->
+        <section class="card analyzer">
+            <h2>📊 Stress Analyzer</h2>
+            <div class="input-group">
+                <label>Sleep Hours:</label>
+                <input type="number" id="sleepHours" placeholder="e.g. 7" min="0" max="24">
+            </div>
+            <div class="input-group">
+                <label>Study Hours:</label>
+                <input type="number" id="studyHours" placeholder="e.g. 5" min="0" max="24">
+            </div>
+            <div class="input-group">
+                <label>Screen Time (hrs):</label>
+                <input type="number" id="screenTime" placeholder="e.g. 4" min="0" max="24">
+            </div>
+            <div class="input-group">
+                <label>Current Mood:</label>
+                <select id="mood">
+                    <option value="happy">Happy/Calm</option>
+                    <option value="tired">Tired/Bored</option>
+                    <option value="anxious">Anxious/Stressed</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Upcoming Exams?</label>
+                <select id="exams">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <button onclick="analyzeStress()">Analyze My Stress</button>
+
+            <div id="stressResult" class="result-area">
+                <!-- Results will appear here -->
+            </div>
+        </section>
+
+        <!-- Goal Tracker Section -->
+        <section class="card goals">
+            <h2>🎯 Daily Goals</h2>
+            <div class="goal-input">
+                <input type="text" id="goalInput" placeholder="Add a new goal...">
+                <button onclick="addGoal()">Add</button>
+            </div>
+            <ul id="goalList"></ul>
+        </section>
+
+        <!-- Digital Diary Section -->
+        <section class="card diary">
+            <h2>📖 Digital Diary</h2>
+            <textarea id="diaryInput" placeholder="How was your day? Write your thoughts here..."></textarea>
+            <button onclick="saveNote()">Save Entry</button>
+            
+            <div class="saved-notes">
+                <h3>Previous Entries</h3>
+                <div id="notesContainer"></div>
+            </div>
+        </section>
+
+        <!-- Stress Relief Tips -->
+        <section class="card tips">
+            <h2>🌿 Quick Relief Tips</h2>
+            <ul>
+                <li><strong>4-7-8 Breathing:</strong> Inhale 4s, Hold 7s, Exhale 8s.</li>
+                <li><strong>Pomodoro:</strong> Study for 25 mins, rest for 5 mins.</li>
+                <li><strong>Hydrate:</strong> Drink a glass of water right now.</li>
+                <li><strong>Move:</strong> Stretch for 2 minutes.</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Made with ❤️ for Students</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
