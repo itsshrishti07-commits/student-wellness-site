@@ -1,106 +1,102 @@
-document.addEventListener('DOMContentLoaded', () => {
-    loadNotes();
-    loadGoals();
-});
-
 // --- STRESS ANALYZER LOGIC ---
-function analyzeStress() {
-    const sleep = document.getElementById('sleepHours').value;
-    const study = document.getElementById('studyHours').value;
-    const screen = document.getElementById('screenTime').value;
+function calculateStress() {
+    const sleep = document.getElementById('sleep').value;
+    const study = document.getElementById('study').value;
+    const screen = document.getElementById('screen').value;
     const mood = document.getElementById('mood').value;
     const exams = document.getElementById('exams').value;
 
-    const resultDiv = document.getElementById('stressResult');
+    let score = 0;
+
+    // Scoring logic
+    if (sleep < 6) score += 3;
+    if (study > 8) score += 2;
+    if (screen > 6) score += 2;
+    if (mood === 'stressed') score += 3;
+    if (exams === 'yes') score += 2;
+
+    const resultDiv = document.getElementById('result');
+    const scoreText = document.getElementById('stressScore');
+    const adviceText = document.getElementById('stressAdvice');
+
     resultDiv.style.display = 'block';
 
-    let stressScore = 0;
-
-    // Logic calculation
-    if (sleep < 6) stressScore += 3;
-    if (study > 8) stressScore += 2;
-    if (screen > 5) stressScore += 2;
-    if (mood === 'anxious') stressScore += 3;
-    if (exams === 'yes') stressScore += 2;
-
-    let level = "";
-    let suggestion = "";
-    let cssClass = "";
-
-    if (stressScore <= 4) {
-        level = "Low Stress";
-        suggestion = "You're doing great! Keep maintaining this balance.";
-        cssClass = "low-stress";
-    } else if (stressScore <= 8) {
-        level = "Medium Stress";
-        suggestion = "Try to take more breaks and maybe reduce screen time.";
-        cssClass = "med-stress";
+    if (score <= 3) {
+        scoreText.innerText = "Stress Level: Low 😊";
+        scoreText.style.color = "green";
+        adviceText.innerText = "You're doing great! Keep maintaining your current routine.";
+    } else if (score <= 7) {
+        scoreText.innerText = "Stress Level: Medium 😐";
+        scoreText.style.color = "orange";
+        adviceText.innerText = "You might be feeling a bit tired. Try to take short breaks and sleep more.";
     } else {
-        level = "High Stress";
-        suggestion = "Please prioritize sleep and reach out to a friend. Take a day off if possible.";
-        cssClass = "high-stress";
+        scoreText.innerText = "Stress Level: High 😰";
+        scoreText.style.color = "red";
+        adviceText.innerText = "Take a deep breath. It's time to pause, talk to a friend, and reduce your workload for today.";
     }
-
-    resultDiv.className = `result-area ${cssClass}`;
-    resultDiv.innerHTML = `<strong>Result: ${level}</strong><br>${suggestion}`;
 }
 
-// --- DIGITAL DIARY LOGIC ---
-function saveNote() {
-    const noteText = document.getElementById('diaryInput').value;
-    if (!noteText) return;
+// --- DIARY LOGIC ---
+function saveDiary() {
+    const entry = document.getElementById('diaryInput').value;
+    if (entry === "") return alert("Please write something first!");
 
     const date = new Date().toLocaleString();
-    const notes = JSON.parse(localStorage.getItem('myNotes') || '[]');
-    
-    notes.unshift({ text: noteText, date: date }); // Add new note to top
-    localStorage.setItem('myNotes', JSON.stringify(notes));
-    
-    document.getElementById('diaryInput').value = ''; // Clear input
-    loadNotes();
+    const diaryData = { text: entry, time: date };
+
+    let entries = JSON.parse(localStorage.getItem('myEntries')) || [];
+    entries.unshift(diaryData);
+    localStorage.setItem('myEntries', JSON.stringify(entries));
+
+    document.getElementById('diaryInput').value = "";
+    displayEntries();
 }
 
-function loadNotes() {
-    const notesContainer = document.getElementById('notesContainer');
-    const notes = JSON.parse(localStorage.getItem('myNotes') || '[]');
-    
-    notesContainer.innerHTML = notes.map(note => `
-        <div class="note-item">
-            <span class="note-date">${note.date}</span>
-            <p>${note.text}</p>
-        </div>
-    `).join('');
+function displayEntries() {
+    const displayArea = document.getElementById('diaryEntries');
+    if (!displayArea) return;
+
+    let entries = JSON.parse(localStorage.getItem('myEntries')) || [];
+    displayArea.innerHTML = "";
+
+    entries.forEach(item => {
+        displayArea.innerHTML += `
+            <div class="card">
+                <small>${item.time}</small>
+                <p>${item.text}</p>
+            </div>
+        `;
+    });
+}
+
+function clearDiary() {
+    if (confirm("Delete all entries?")) {
+        localStorage.removeItem('myEntries');
+        displayEntries();
+    }
 }
 
 // --- GOAL TRACKER LOGIC ---
 function addGoal() {
     const goalInput = document.getElementById('goalInput');
-    const goalText = goalInput.value;
-    if (!goalText) return;
-
-    const goals = JSON.parse(localStorage.getItem('myGoals') || '[]');
-    goals.push(goalText);
-    localStorage.setItem('myGoals', JSON.stringify(goals));
-    
-    goalInput.value = '';
-    loadGoals();
-}
-
-function loadGoals() {
     const goalList = document.getElementById('goalList');
-    const goals = JSON.parse(localStorage.getItem('myGoals') || '[]');
+
+    if (goalInput.value === "") return;
+
+    const li = document.createElement('li');
+    li.innerHTML = `✅ ${goalInput.value}`;
+    li.style.background = "#fff";
+    li.style.padding = "10px";
+    li.style.marginBottom = "5px";
+    li.style.borderRadius = "5px";
     
-    goalList.innerHTML = goals.map((goal, index) => `
-        <li>
-            ${goal} 
-            <button onclick="deleteGoal(${index})">Done</button>
-        </li>
-    `).join('');
+    goalList.appendChild(li);
+    goalInput.value = "";
 }
 
-function deleteGoal(index) {
-    const goals = JSON.parse(localStorage.getItem('myGoals') || '[]');
-    goals.splice(index, 1);
-    localStorage.setItem('myGoals', JSON.stringify(goals));
-    loadGoals();
-}
+// Initialize diary on page load
+window.onload = () => {
+    if (document.getElementById('diaryEntries')) {
+        displayEntries();
+    }
+};
