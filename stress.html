@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stress Analyzer | WellnessHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">WellnessHub</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="stress.html">Stress Analyzer</a></li>
+            <li><a href="diary.html">Digital Diary</a></li>
+            <li><a href="tips.html">Tips</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <section class="card">
+            <h2>Stress Level Analyzer</h2>
+            <p>Fill out the form below to understand your current stress state.</p>
+            <br>
+            <form id="stressForm">
+                <label>How many hours did you sleep last night?</label>
+                <input type="number" id="sleep" required placeholder="e.g. 7">
+
+                <label>How many hours did you study today?</label>
+                <input type="number" id="study" required placeholder="e.g. 5">
+
+                <label>Daily screen time (hours)?</label>
+                <input type="number" id="screen" required placeholder="e.g. 4">
+
+                <label>Current Mood</label>
+                <select id="mood">
+                    <option value="happy">Happy / Relaxed</option>
+                    <option value="neutral">Neutral / Busy</option>
+                    <option value="stressed">Anxious / Overwhelmed</option>
+                </select>
+
+                <label>Do you have exams coming up this week?</label>
+                <select id="exams">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+
+                <button type="button" class="btn" onclick="calculateStress()">Analyze Now</button>
+            </form>
+
+            <div id="result" class="card">
+                <h3 id="stressScore"></h3>
+                <p id="stressAdvice"></p>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
